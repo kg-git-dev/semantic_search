@@ -1,0 +1,4 @@
+__pycache__/
+venv/
+embeddings.pkl
+residentialDatabase.db

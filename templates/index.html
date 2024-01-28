@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Flask App</title>
+</head>
+<body>
+    <h1>MLS Semantic Search</h1>
+    
+    <form id="queryForm">
+        <label for="query">Enter your query:</label>
+        <input type="text" id="query" name="query" required>
+        <button type="button" onclick="submitQuery()">Search</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script>
+        function submitQuery() {
+            var query = document.getElementById("query").value;
+
+            fetch('/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 'query': query }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response and display results
+                var resultsDiv = document.getElementById("results");
+                resultsDiv.innerHTML = '<h2>Results:</h2>';
+                
+                data.results.forEach(result => {
+                    resultsDiv.innerHTML += `<p>MLS Value: ${result.mls_value}, Score: ${result.score}<br /> Passage: ${result.passage}</p>`;
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>
